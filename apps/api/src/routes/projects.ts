@@ -97,11 +97,14 @@ router.post(
             demoMode?: boolean
         }
 
-        // Ensure the agency exists (auto-create for demo)
+        // Ensure the agency exists (auto-create)
+        const agencyName = agencyId.startsWith('github-')
+            ? 'GitHub Workspace'
+            : 'Demo Agency'
         await prisma.agency.upsert({
             where: { id: agencyId },
             update: {},
-            create: { id: agencyId, name: 'Demo Agency' },
+            create: { id: agencyId, name: agencyName },
         })
 
         const project = await prisma.project.create({

@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react'
 import type { SSEEvent } from '@radius/shared'
 import { usePipelineStore } from '../store/pipeline.store'
 
-const BASE = import.meta.env.VITE_API_URL ?? 'http://localhost:3001'
+const BASE = import.meta.env.VITE_API_URL ?? 'http://localhost:3000'
 
 export function useSSE(projectId: string | null, onEvent: (event: SSEEvent) => void) {
     const esRef = useRef<EventSource | null>(null)

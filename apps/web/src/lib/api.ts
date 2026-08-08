@@ -1,10 +1,11 @@
 import type { Project, AgencySettings, ClarifyQuestion } from '@radius/shared'
 
-const BASE = import.meta.env.VITE_API_URL ?? 'http://localhost:3001'
+const BASE = import.meta.env.VITE_API_URL ?? 'http://localhost:3000'
 
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
     const res = await fetch(`${BASE}${path}`, {
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         ...options,
     })
     if (!res.ok) {

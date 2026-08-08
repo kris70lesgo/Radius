@@ -20,6 +20,9 @@ export default {
       fontFamily: {
         mono: ['JetBrains Mono', 'monospace'],
         sans: ['Inter', 'sans-serif'],
+        inter: ['Inter', 'sans-serif'],
+        dancing: ['Dancing Script', 'cursive'],
+        instrument: ['Instrument Serif', 'serif'],
       },
       keyframes: {
         'pulse-glow': {

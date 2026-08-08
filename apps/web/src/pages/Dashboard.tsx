@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "../lib/api";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -11,6 +11,9 @@ import { Sidebar } from "../components/Sidebar";
 import { ProjectCard } from "../components/ui/project-card";
 import { ProjectFileIcon } from "../components/ui/custom-icons";
 import { Button } from "../components/ui/base/buttons/button";
+
+const API_BASE = import.meta.env.VITE_API_URL ?? "http://localhost:3000";
+const DEMO_AGENCY_ID = "demo-agency-cuid";
 
 function SkeletonCard() {
   return (
@@ -42,18 +45,44 @@ export function Dashboard() {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const queryClient = useQueryClient();
 
-  const agencyId = "demo-agency-cuid";
+  const [agencyId, setAgencyId] = useState<string | null>(null);
+
+  // Fetch session to determine agency ID
+  useEffect(() => {
+    async function fetchSession() {
+      try {
+        const res = await fetch(`${API_BASE}/api/session`, {
+          credentials: "include",
+        });
+        if (!res.ok) throw new Error("Failed to fetch session");
+        const data = await res.json();
+
+        if (data.mode === "github" && data.githubUser) {
+          // GitHub user — unique agency per GitHub account, starts empty
+          setAgencyId(`github-${data.githubUser.id}`);
+        } else {
+          // Demo or no session — use shared demo agency
+          setAgencyId(DEMO_AGENCY_ID);
+        }
+      } catch {
+        // Fallback to demo agency
+        setAgencyId(DEMO_AGENCY_ID);
+      }
+    }
+    fetchSession();
+  }, []);
 
   const { data, isLoading } = useQuery({
     queryKey: ["projects", agencyId],
-    queryFn: () => api.listProjects(agencyId, 1),
+    queryFn: () => api.listProjects(agencyId!, 1),
+    enabled: !!agencyId,
     staleTime: 30_000,
     refetchInterval: 5000,
   });
 
   const handleProjectSubmit = async (concept: string) => {
     try {
-      const { projectId } = await api.createProject({ concept, agencyId });
+      const { projectId } = await api.createProject({ concept, agencyId: agencyId! });
       navigate(`/studio/${projectId}`);
     } catch (err: unknown) {
       toast.error("Failed to create project", {
@@ -344,7 +373,7 @@ export function Dashboard() {
 
       {isModalOpen && (
         <ConceptWizard
-          agencyId={agencyId}
+          agencyId={agencyId!}
           onClose={() => setIsModalOpen(false)}
           onSubmit={handleProjectSubmit}
         />
@@ -352,7 +381,7 @@ export function Dashboard() {
 
       {isSettingsOpen && (
         <SettingsModal
-          agencyId={agencyId}
+          agencyId={agencyId!}
           onClose={() => setIsSettingsOpen(false)}
         />
       )}

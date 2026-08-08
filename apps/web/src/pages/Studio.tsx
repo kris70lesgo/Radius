@@ -249,7 +249,7 @@ export function Studio() {
       <div className="h-screen bg-bg-base flex flex-col items-center justify-center text-text-primary gap-4">
         <p>Project not found or failed to load.</p>
         <button
-          onClick={() => navigate("/")}
+          onClick={() => navigate("/dashboard")}
           className="bg-bg-elevated border border-border px-4 py-2 rounded-md hover:bg-border transition-colors"
         >
           Return to Dashboard
@@ -274,7 +274,7 @@ export function Studio() {
       <header className="h-14 border-b border-border bg-bg-surface flex items-center justify-between px-4 shrink-0 z-20">
         <div className="flex items-center gap-4">
           <button
-            onClick={() => navigate("/")}
+            onClick={() => navigate("/dashboard")}
             className="text-text-muted hover:text-text-primary transition-colors flex items-center gap-1 text-sm font-semibold"
           >
             <ArrowLeft size={16} /> Dashboard

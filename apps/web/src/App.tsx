@@ -1,6 +1,8 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "sonner";
+import { Landing } from "./pages/Landing";
+import { Setup } from "./pages/Setup";
 import { Dashboard } from "./pages/Dashboard";
 import { Studio } from "./pages/Studio";
 
@@ -29,7 +31,9 @@ export default function App() {
         )}
         <div className={isDemoMode ? "pt-8" : ""}>
           <Routes>
-            <Route path="/" element={<Dashboard />} />
+            <Route path="/" element={<Landing />} />
+            <Route path="/setup" element={<Setup />} />
+            <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/studio/:projectId" element={<Studio />} />
           </Routes>
         </div>

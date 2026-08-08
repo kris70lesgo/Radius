@@ -1,15 +1,19 @@
 import cors from 'cors'
 import express from 'express'
+import session from 'express-session'
+import cookieParser from 'cookie-parser'
 import { redis, redisSub } from './redis'
 import { projectsRouter } from './routes/projects'
 import { streamRouter } from './routes/stream'
 import { agenciesRouter } from './routes/agencies'
 import { exportRouter } from './routes/export'
+import { githubRouter } from './routes/github'
+import { sessionRouter } from './routes/session'
 import { errorHandler } from './middleware/errorHandler'
 import './workers/pipeline.worker' // register worker on startup
 
 const app = express()
-const PORT = process.env.PORT ?? 3001
+const PORT = process.env.PORT ?? 3000
 const FRONTEND_URL = process.env.FRONTEND_URL ?? 'http://localhost:5173'
 
 app.use(cors({
@@ -22,8 +26,22 @@ app.use(cors({
     if (origin === FRONTEND_URL) return callback(null, true)
     callback(new Error('Not allowed by CORS'))
   },
+  credentials: true,
 }))
 app.use(express.json())
+app.use(cookieParser())
+app.use(session({
+  secret: process.env.SESSION_SECRET ?? 'radius-dev-session-secret-change-me',
+  resave: false,
+  saveUninitialized: false,
+  name: 'radius-session',
+  cookie: {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+  },
+}))
 
 // Health check
 app.get('/health', (_req, res) => {
@@ -35,6 +53,8 @@ app.use('/api/projects', projectsRouter)
 app.use('/api/projects', streamRouter)
 app.use('/api/agencies', agenciesRouter)
 app.use('/api/pipeline', exportRouter)
+app.use('/api/auth/github', githubRouter)
+app.use('/api', sessionRouter)
 
 // Global error handler (must be last)
 app.use(errorHandler)
