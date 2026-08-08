@@ -34,8 +34,8 @@ zerops:
         httpGet:
           port: 3001
           path: /health
-        failureTimeout: 180
-        retryPeriod: 5
+        failureTimeout: 180s
+        retryPeriod: 5s
     run:
       base: nodejs@22
       prepareCommands:
@@ -53,7 +53,7 @@ zerops:
         PORT: "3001"
         # Cross-service references: Zerops fills these from managed service env vars
         DATABASE_URL: ${db_connectionString}
-        REDIS_URL: ${cache_connectionString}
+        REDIS_URL: ${redis_connectionString}
 
   # ── Web: Vite static build (React SPA) ──────────────────────────────────
   - setup: web
