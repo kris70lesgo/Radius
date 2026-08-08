@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import type { SSEEvent } from '@forgeos/shared'
+import type { SSEEvent } from '@radius/shared'
 import { usePipelineStore } from '../store/pipeline.store'
 
 const BASE = import.meta.env.VITE_API_URL ?? 'http://localhost:3001'

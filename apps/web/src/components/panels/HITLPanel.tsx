@@ -14,7 +14,7 @@ import {
 import { DataEntitiesSection } from "./DataEntityDiagram";
 import { ConfidenceBadge } from "../ConfidenceBadge";
 import { usePipelineStore } from "../../store/pipeline.store";
-import { NODE_LABELS, MAX_REGENERATIONS } from "@forgeos/shared";
+import { NODE_LABELS, MAX_REGENERATIONS } from "@radius/shared";
 import { toast } from "sonner";
 import { api } from "../../lib/api";
 

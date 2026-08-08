@@ -1,4 +1,4 @@
-import type { Project, AgencySettings, ClarifyQuestion } from '@forgeos/shared'
+import type { Project, AgencySettings, ClarifyQuestion } from '@radius/shared'
 
 const BASE = import.meta.env.VITE_API_URL ?? 'http://localhost:3001'
 

@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { Terminal, ChevronDown, ChevronUp, Trash2 } from 'lucide-react'
 import { usePipelineStore } from '../../store/pipeline.store'
-import { NODE_LABELS } from '@forgeos/shared'
+import { NODE_LABELS } from '@radius/shared'
 
 export function ConsolePanel() {
     const consoleLogs = usePipelineStore((s) => s.consoleLogs)

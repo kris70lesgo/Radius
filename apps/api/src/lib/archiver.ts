@@ -11,7 +11,7 @@ export async function createLocalStack({
     localRepoPath: string
     envVarsRequired: string[]
 }): Promise<string> {
-    const outDir = `/tmp/forgeos/${projectId}`
+    const outDir = `/tmp/radius/${projectId}`
     await fs.promises.mkdir(outDir, { recursive: true })
     const zipPath = path.join(outDir, 'local-stack.zip')
 

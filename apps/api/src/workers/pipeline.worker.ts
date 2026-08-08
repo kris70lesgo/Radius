@@ -2,12 +2,12 @@ import { Worker, Job } from "bullmq";
 import { Prisma } from "@prisma/client";
 import { prisma } from "../prisma";
 import { publishEvent } from "../lib/pubsub";
-import { NodeStatus } from "@forgeos/shared";
+import { NodeStatus } from "@radius/shared";
 import { runStrategist, StrategistOutput } from "./agents/strategist";
 import { runAnalyst, AnalystOutput } from "./agents/analyst";
 import { runTechLead, TechLeadOutput } from "./agents/techlead";
 import { runShipyard } from "./agents/shipyard";
-import { NODE_LABELS } from "@forgeos/shared";
+import { NODE_LABELS } from "@radius/shared";
 
 const log = (
   projectId: string,

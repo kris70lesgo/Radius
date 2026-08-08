@@ -1,5 +1,5 @@
 # yaml-language-server: $schema=https://api.app-prg1.zerops.io/api/rest/public/settings/zerops-yml-json-schema.json
-# ForgeOS Node Studio — Zerops build & deploy configuration
+# Radius — Zerops build & deploy configuration
 # Monorepo: pnpm + Turborepo. Two runtime services (api + web) + managed Postgres + Valkey.
 
 zerops:
@@ -12,8 +12,8 @@ zerops:
           corepack enable
           corepack prepare pnpm@10.14.0 --activate
           pnpm install --frozen-lockfile
-          pnpm --filter @forgeos/shared build
-          pnpm --filter @forgeos/api build
+          pnpm --filter @radius/shared build
+          pnpm --filter @radius/api build
       # Deploy only what the runtime needs. node_modules is installed at runtime
       # via initCommands to avoid pnpm symlink issues during file copy.
       deployFiles:
@@ -64,8 +64,8 @@ zerops:
           corepack enable
           corepack prepare pnpm@10.14.0 --activate
           pnpm install --frozen-lockfile
-          pnpm --filter @forgeos/shared build
-          pnpm --filter @forgeos/web build
+          pnpm --filter @radius/shared build
+          pnpm --filter @radius/web build
       # The ~ wildcard flattens apps/web/dist/ contents into /var/www/
       deployFiles: apps/web/dist/~
       cache: node_modules

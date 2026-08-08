@@ -9,8 +9,8 @@ import {
     ClarifyConceptSchema,
     MAX_REGENERATIONS,
     NodeStatus,
-} from '@forgeos/shared'
-import type { ClarifyQuestion } from '@forgeos/shared'
+} from '@radius/shared'
+import type { ClarifyQuestion } from '@radius/shared'
 import { validate } from '../middleware/validate'
 import { asyncHandler } from '../middleware/asyncHandler'
 import { publishEvent } from '../lib/pubsub'

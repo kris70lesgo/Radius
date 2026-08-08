@@ -1,9 +1,9 @@
-# ForgeOS Node Studio — AI-Powered SaaS Factory on Zerops
+# Radius — AI-Powered SaaS Factory on Zerops
 
 ![WeMakeDevs Zerops Challenge](https://img.shields.io/badge/WeMakeDevs-Zerops%20Challenge-6C47FF?style=for-the-badge)
 ![Solo Submission](https://img.shields.io/badge/Submission-Solo-111827?style=for-the-badge)
 
-ForgeOS Node Studio turns a raw SaaS concept into a reviewed product plan, technical architecture, generated application scaffold, GitHub repository, and Zerops-ready deployment package. It combines a sequential multi-agent pipeline with human review, keeping every important product and engineering decision visible and editable.
+Radius turns a raw SaaS concept into a reviewed product plan, technical architecture, generated application scaffold, GitHub repository, and Zerops-ready deployment package. It combines a sequential multi-agent pipeline with human review, keeping every important product and engineering decision visible and editable.
 
 ## What It Does
 
@@ -36,13 +36,13 @@ Shipyard (GitHub repository + Zerops-ready package)
 | Tech Lead | Designs the architecture, Prisma schema, API routes, stack, and environment requirements |
 | Shipyard | Generates the application scaffold, pushes it to GitHub, and packages it for Zerops |
 
-## How ForgeOS Uses Zerops
+## How Radius Uses Zerops
 
-Zerops is both the runtime for ForgeOS and the default deployment target for the applications it creates.
+Zerops is both the runtime for Radius and the default deployment target for the applications it creates.
 
-- **ForgeOS runs on Zerops:** the API uses `nodejs@22`, the Vite frontend uses static hosting, and state is provided by managed PostgreSQL and Valkey services.
+- **Radius runs on Zerops:** the API uses `nodejs@22`, the Vite frontend uses static hosting, and state is provided by managed PostgreSQL and Valkey services.
 - **Generated apps target Zerops:** Shipyard includes a generated `zerops.yaml` in every application package.
-- **Infrastructure as Code:** `zerops-import.yaml` defines the complete ForgeOS service topology for repeatable project creation.
+- **Infrastructure as Code:** `zerops-import.yaml` defines the complete Radius service topology for repeatable project creation.
 - **Private networking:** the API communicates with PostgreSQL and Valkey over Zerops service networking rather than exposing data services publicly.
 - **GitHub integration:** the API and web services build and deploy automatically when changes are pushed to the connected repository.
 
@@ -147,7 +147,7 @@ pnpm ai:test    # Requires live AI credentials
 ## AI Tools Used
 
 - **Claude Code (Amp):** development, implementation, and iteration
-- **NVIDIA NIM / DeepSeek V4 Pro:** inference for the ForgeOS agent pipeline
+- **NVIDIA NIM / DeepSeek V4 Pro:** inference for the Radius agent pipeline
 
 ## Hackathon Submission
 

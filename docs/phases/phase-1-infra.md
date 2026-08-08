@@ -1,10 +1,10 @@
-# ForgeOS Node Studio — PHASE 1: Infrastructure & Foundation
+# Radius — PHASE 1: Infrastructure & Foundation
 # DigitalOcean Hackathon
 
 ---
 
 ## WHAT YOU'RE BUILDING
-ForgeOS Node Studio is a multi-agent SaaS incubation platform. A user inputs a raw SaaS idea → AI pipeline of specialized agents → auto-deploys a boilerplate repo to DigitalOcean via GitHub.
+Radius is a multi-agent SaaS incubation platform. A user inputs a raw SaaS idea → AI pipeline of specialized agents → auto-deploys a boilerplate repo to DigitalOcean via GitHub.
 
 **Your job in Phase 1**: Scaffold the entire monorepo skeleton, shared types, database schema, Docker local dev environment, and verify all infrastructure connections are alive. Nothing should be built on a broken foundation.
 
@@ -22,7 +22,7 @@ You have these MCP servers available — use them:
 ## MONOREPO TO SCAFFOLD
 
 ```
-forgeos/
+radius/
 ├── apps/
 │   ├── web/                    # Vite + React 18 + TypeScript (scaffold only, no components yet)
 │   └── api/                    # Express + TypeScript (scaffold only, no routes yet)
@@ -49,7 +49,7 @@ Use **pnpm workspaces**. TypeScript strict mode everywhere. No `any` types.
 `package.json`:
 ```json
 {
-  "name": "forgeos",
+  "name": "radius",
   "private": true,
   "scripts": {
     "dev": "turbo run dev",
@@ -318,9 +318,9 @@ services:
   postgres:
     image: ankane/pgvector:latest
     environment:
-      POSTGRES_DB: forgeos_dev
-      POSTGRES_USER: forgeos
-      POSTGRES_PASSWORD: forgeos_dev_password
+      POSTGRES_DB: radius_dev
+      POSTGRES_USER: radius
+      POSTGRES_PASSWORD: radius_dev_password
     ports:
       - '5432:5432'
     volumes:
@@ -381,7 +381,7 @@ export const redisSub = new Redis(process.env.REDIS_URL!, { lazyConnect: true })
 apps/web/
 ├── src/
 │   ├── main.tsx         # React entry point
-│   ├── App.tsx          # Single <div>ForgeOS loading...</div> placeholder
+│   ├── App.tsx          # Single <div>Radius loading...</div> placeholder
 │   └── index.css        # Import Tailwind directives only
 ├── index.html
 ├── vite.config.ts
@@ -438,7 +438,7 @@ apps/web/
 
 ```env
 # Database (DO Managed PostgreSQL or local docker)
-DATABASE_URL=postgresql://forgeos:forgeos_dev_password@localhost:5432/forgeos_dev
+DATABASE_URL=postgresql://radius:radius_dev_password@localhost:5432/radius_dev
 
 # Redis (DO Managed Redis or local docker)
 REDIS_URL=redis://localhost:6379
@@ -474,7 +474,7 @@ CONTEXT7_API_KEY=              # From context7.com/dashboard (free)
 This file is auto-read by Claude Code on every session. Write it to give full project context:
 
 ```markdown
-# ForgeOS Node Studio
+# Radius
 
 ## What This Is
 Multi-agent SaaS incubation platform for the DigitalOcean hackathon.
@@ -503,7 +503,7 @@ Input: raw SaaS concept → Output: deployed boilerplate on DO App Platform via 
 - Demo mode: ?demo=true skips all external API calls
 
 ## Packages
-- Shared types: packages/shared (import as @forgeos/shared)
+- Shared types: packages/shared (import as @radius/shared)
 - API: apps/api (port 3001)
 - Web: apps/web (port 5173)
 

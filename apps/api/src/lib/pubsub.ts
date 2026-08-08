@@ -1,5 +1,5 @@
 import { redis } from '../redis'
-import { SSEEvent } from '@forgeos/shared'
+import { SSEEvent } from '@radius/shared'
 
 const MAX_EVENT_LOG_LENGTH = 50
 

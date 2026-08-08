@@ -1,10 +1,10 @@
-# ForgeOS Node Studio — PHASE 6: Demo Mode & Polish
+# Radius — PHASE 6: Demo Mode & Polish
 # DigitalOcean Hackathon
 
 ---
 
 ## CONTEXT RECAP
-ForgeOS is a multi-agent SaaS incubation platform. Phases 1–5 complete:
+Radius is a multi-agent SaaS incubation platform. Phases 1–5 complete:
 - Full monorepo, shared types, DB schema
 - Backend API + SSE streaming + BullMQ pipeline
 - All 3 LLM agents with RAG context
@@ -282,7 +282,7 @@ Don't leave any blank screens:
 Write a compelling `README.md` at project root:
 
 ```markdown
-# ForgeOS Node Studio
+# Radius
 
 > Transform a raw SaaS idea into a deployed, production-ready app in minutes.
 
@@ -368,4 +368,4 @@ These are the judging criteria. Make sure every DO service is clearly visible in
 
 ---
 
-*End of Phase 6 — ForgeOS Node Studio is ready to ship. 🚀*
+*End of Phase 6 — Radius is ready to ship. 🚀*

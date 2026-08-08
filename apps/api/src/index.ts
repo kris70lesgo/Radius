@@ -44,7 +44,7 @@ async function start() {
   await redisSub.connect()
 
   app.listen(PORT, () => {
-    console.log(`ForgeOS API running on http://localhost:${PORT}`)
+    console.log(`Radius API running on http://localhost:${PORT}`)
     console.log(`\n--- Environment Variables ---`)
     console.log(`DATABASE_URL:          ${process.env.DATABASE_URL ? '✅ SET' : '❌ MISSING'}`)
     console.log(`REDIS_URL:             ${process.env.REDIS_URL ?? '❌ MISSING'}`)

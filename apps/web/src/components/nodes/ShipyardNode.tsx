@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import { BaseNode } from "./BaseNode";
 import { usePipelineStore } from "../../store/pipeline.store";
-import { NodeStatus } from "@forgeos/shared";
+import { NodeStatus } from "@radius/shared";
 import { api } from "../../lib/api";
 
 export const ShipyardNode = memo(

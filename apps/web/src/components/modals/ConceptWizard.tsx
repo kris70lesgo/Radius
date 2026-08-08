@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Loader2, Rocket, Sparkles, ArrowLeft, Check, X } from 'lucide-react'
 import { api } from '../../lib/api'
-import type { ClarifyQuestion } from '@forgeos/shared'
+import type { ClarifyQuestion } from '@radius/shared'
 import { motion, AnimatePresence } from 'framer-motion'
 
 type WizardStep = 'concept' | 'loading' | 'questions'

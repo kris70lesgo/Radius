@@ -1,10 +1,10 @@
-# ForgeOS Node Studio — PHASE 2: Backend Core
+# Radius — PHASE 2: Backend Core
 # DigitalOcean Hackathon
 
 ---
 
 ## CONTEXT RECAP
-ForgeOS is a multi-agent SaaS incubation platform. Phase 1 is complete:
+Radius is a multi-agent SaaS incubation platform. Phase 1 is complete:
 - Monorepo scaffolded with pnpm workspaces
 - `packages/shared` has all enums, types, Zod schemas, SSE event types
 - Prisma schema migrated — 5 tables + pgvector active
@@ -55,7 +55,7 @@ ForgeOS is a multi-agent SaaS incubation platform. Phase 1 is complete:
 ### `projects.ts`
 
 **POST `/api/projects`**
-- Validate body with `CreateProjectSchema` from `@forgeos/shared`
+- Validate body with `CreateProjectSchema` from `@radius/shared`
 - Create `Project` record in DB with `status: PENDING, currentNode: 0`
 - Also create initial `AgentOutput` stubs for nodeIds 1, 2, 3 with `status: LOCKED`
 - Add job to BullMQ queue `agentPipeline`: `{ projectId, nodeId: 1, agencyId, concept }`
@@ -150,7 +150,7 @@ import { Worker, Job } from 'bullmq'
 import { redis } from '../redis'
 import { prisma } from '../prisma'
 import { publishEvent } from '../lib/pubsub'
-import { NodeStatus } from '@forgeos/shared'
+import { NodeStatus } from '@radius/shared'
 
 interface PipelineJobData {
   projectId: string
@@ -314,7 +314,7 @@ app.use('/api/projects', streamRouter)
 app.use(errorHandler)
 
 app.listen(process.env.PORT ?? 3001, () => {
-  console.log(`ForgeOS API running on :${process.env.PORT ?? 3001}`)
+  console.log(`Radius API running on :${process.env.PORT ?? 3001}`)
 })
 ```
 

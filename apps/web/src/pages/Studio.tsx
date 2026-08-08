@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import { api } from "../lib/api";
 import { usePipelineStore } from "../store/pipeline.store";
-import { NodeStatus } from "@forgeos/shared";
+import { NodeStatus } from "@radius/shared";
 import { useSSE } from "../hooks/useSSE";
 import { PipelineCanvas } from "../components/canvas/PipelineCanvas";
 import { HITLPanel } from "../components/panels/HITLPanel";
@@ -20,7 +20,7 @@ import { ExportModal } from "../components/ExportModal";
 import { KanbanModal } from "../components/modals/KanbanModal";
 import { ConceptDetailModal } from "../components/modals/ConceptDetailModal";
 import { ConsolePanel } from "../components/panels/ConsolePanel";
-import type { Project, Deployment } from "@forgeos/shared";
+import type { Project, Deployment } from "@radius/shared";
 
 export function Studio() {
   const { projectId } = useParams();

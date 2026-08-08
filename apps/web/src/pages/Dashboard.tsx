@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { api } from "../lib/api";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Plus, Rocket, Settings, Trash2, Zap } from "lucide-react";
-import { NodeStatus, Project, ProjectStatus } from "@forgeos/shared";
+import { NodeStatus, Project, ProjectStatus } from "@radius/shared";
 import { toast } from "sonner";
 import { SettingsModal } from "../components/modals/SettingsModal";
 import { ConceptWizard } from "../components/modals/ConceptWizard";
@@ -175,7 +175,7 @@ export function Dashboard() {
           <div className="flex items-center gap-3">
             <h1 className="text-2xl font-black font-mono tracking-tight text-text-primary flex items-center gap-2">
               <Zap size={24} className="text-accent-primary" />
-              ForgeOS Node Studio
+              Radius
             </h1>
           </div>
           <div className="flex items-center gap-2">

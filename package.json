@@ -1,5 +1,5 @@
 {
-  "name": "forgeos",
+  "name": "radius",
   "private": true,
   "packageManager": "pnpm@10.14.0",
   "scripts": {

@@ -1,5 +1,5 @@
 # yaml-language-server: $schema=https://api.app-prg1.zerops.io/api/rest/public/settings/import-project-yml-json-schema.json
-# ForgeOS Node Studio — Zerops infrastructure import
+# Radius — Zerops infrastructure import
 # Import via Zerops Dashboard → "Import a project" or: zcli project project-import zerops-import.yaml
 #
 # After import:
@@ -9,13 +9,13 @@
 #   3. Connect the GitHub repo to each runtime service in the Zerops GUI pipeline settings
 
 project:
-  name: forgeos
+  name: radius
   description: "Multi-agent SaaS incubation platform — deployed on Zerops"
   corePackage: LIGHT
   tags:
     - wemakedevs
     - zerops-challenge
-    - forgeos
+    - radius
 
 services:
   # ── Database: Managed PostgreSQL (created first) ────────────────────────

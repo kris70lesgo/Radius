@@ -1,4 +1,4 @@
-# ForgeOS Node Studio — AI Assistant Context
+# Radius — AI Assistant Context
 
 # Read this file at the start of every session before touching any code.
 
@@ -6,7 +6,7 @@
 
 ## WHAT THIS PROJECT IS
 
-**ForgeOS Node Studio** is a multi-agent SaaS incubation platform built for the **WeMakeDevs Zerops Challenge**.
+**Radius** is a multi-agent SaaS incubation platform built for the **WeMakeDevs Zerops Challenge**.
 
 The core idea: a digital agency inputs a raw SaaS concept (e.g. "Client portal for a law firm") and the platform automatically runs it through a pipeline of 4 specialized AI agents, then deploys a production-ready boilerplate repository to Zerops via GitHub — all without writing a single line of code.
 
@@ -35,7 +35,7 @@ Zerops project configuration: <project-root>/zerops.yaml
 
 ### Zerops ZCP — Services Available:
 
-Zerops ZCP provides project-aware access to the infrastructure used by ForgeOS:
+Zerops ZCP provides project-aware access to the infrastructure used by Radius:
 
 - **Node.js runtime** → build and run the API and web services
 - **Managed PostgreSQL** → main database with pgvector
@@ -51,7 +51,7 @@ zcli login --token "${ZEROPS_API_TOKEN}" # Optional; GitHub integration is the p
 
 ### How to activate:
 
-Connect Zerops ZCP using your editor or agent's ZCP integration and select the ForgeOS project. Use zCLI only when command-line access is needed; normal deployments use the Zerops GitHub integration.
+Connect Zerops ZCP using your editor or agent's ZCP integration and select the Radius project. Use zCLI only when command-line access is needed; normal deployments use the Zerops GitHub integration.
 
 **Always prefer live integrations over guessing.** Examples:
 
@@ -65,12 +65,12 @@ Connect Zerops ZCP using your editor or agent's ZCP integration and select the F
 ## MONOREPO STRUCTURE
 
 ```
-forgeos/
+radius/
 ├── apps/
 │   ├── web/                    # Vite + React 18 + TypeScript — frontend
 │   └── api/                    # Express + TypeScript — backend
 ├── packages/
-│   └── shared/                 # @forgeos/shared — types, enums, Zod schemas, SSE events
+│   └── shared/                 # @radius/shared — types, enums, Zod schemas, SSE events
 ├── prisma/
 │   └── schema.prisma           # Main DB schema (PostgreSQL + pgvector)
 ├── scripts/
@@ -87,7 +87,7 @@ forgeos/
 
 ### TypeScript: **strict mode, zero `any` types**
 
-### Import shared package as: `@forgeos/shared`
+### Import shared package as: `@radius/shared`
 
 ---
 
@@ -131,7 +131,7 @@ forgeos/
 | NVIDIA NIM API             | LLM: `deepseek-ai/deepseek-v4-pro` + Embeddings: `BAAI/bge-small-en-v1.5` (768-dim)              |
 | Zerops Managed PostgreSQL  | Main DB + pgvector extension for RAG                                                            |
 | Zerops Valkey              | BullMQ job queue + SSE pub/sub                                                                  |
-| Zerops Node.js runtime     | Runtime and deployment target for ForgeOS and generated user apps                               |
+| Zerops Node.js runtime     | Runtime and deployment target for Radius and generated user apps                               |
 | Zerops Object Storage      | Generated archives and future user-uploaded files                                               |
 
 ---
@@ -255,7 +255,7 @@ POST   /api/projects/:id/iterate                  Day 2: expand existing app
 ## ENVIRONMENT VARIABLES
 
 ```env
-DATABASE_URL=postgresql://forgeos:forgeos_dev_password@localhost:5432/forgeos_dev
+DATABASE_URL=postgresql://radius:radius_dev_password@localhost:5432/radius_dev
 REDIS_URL=redis://localhost:6379
 NVIDIA_NIM_API_KEY=            # NVIDIA API key for NIM inference
 ZEROPS_API_TOKEN=              # Optional zCLI token; GitHub integration does not require it
@@ -353,7 +353,7 @@ When active:
 4. **All agent JSON output must be validated** — if JSON.parse fails, retry up to 3x then FAILED
 5. **SSE cleanup on disconnect** — always unsubscribe Redis + clear heartbeat interval
 6. **Shipyard steps are idempotent** — check `stepXDone` flags before re-running
-7. **ZIP cleanup** — schedule BullMQ delayed job to delete `/tmp/forgeos/:id` after 1 hour
+7. **ZIP cleanup** — schedule BullMQ delayed job to delete `/tmp/radius/:id` after 1 hour
 
 ---
 

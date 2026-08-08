@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { Position } from '@xyflow/react'
-import { NodeStatus } from '@forgeos/shared'
+import { NodeStatus } from '@radius/shared'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
     CheckCircle2,

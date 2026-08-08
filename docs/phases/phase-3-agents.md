@@ -1,10 +1,10 @@
-# ForgeOS Node Studio — PHASE 3: AI Agents
+# Radius — PHASE 3: AI Agents
 # DigitalOcean Hackathon
 
 ---
 
 ## CONTEXT RECAP
-ForgeOS is a multi-agent SaaS incubation platform. Phases 1–2 complete:
+Radius is a multi-agent SaaS incubation platform. Phases 1–2 complete:
 - Monorepo, shared types, Prisma schema, Docker all running
 - Express API with all CRUD routes + approve/reject logic
 - SSE streaming via Redis pub/sub working end-to-end

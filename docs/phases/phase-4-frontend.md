@@ -1,10 +1,10 @@
-# ForgeOS Node Studio — PHASE 4: Frontend
+# Radius — PHASE 4: Frontend
 # DigitalOcean Hackathon
 
 ---
 
 ## CONTEXT RECAP
-ForgeOS is a multi-agent SaaS incubation platform. Phases 1–3 complete:
+Radius is a multi-agent SaaS incubation platform. Phases 1–3 complete:
 - Full backend API with all routes running
 - SSE streaming tested and working end-to-end
 - All 3 LLM agents (Strategist, Analyst, Tech Lead) producing real JSON
@@ -74,8 +74,8 @@ pnpm add @radix-ui/react-dialog @radix-ui/react-drawer  # for HITL panel
 
 ```typescript
 import { create } from 'zustand'
-import { NodeStatus, NODE_LABELS, MAX_REGENERATIONS } from '@forgeos/shared'
-import type { PipelineNodeState, SSEEvent, Deployment } from '@forgeos/shared'
+import { NodeStatus, NODE_LABELS, MAX_REGENERATIONS } from '@radius/shared'
+import type { PipelineNodeState, SSEEvent, Deployment } from '@radius/shared'
 import { api } from '../lib/api'
 
 interface PipelineStore {
@@ -239,7 +239,7 @@ export const api = {
 
 ```typescript
 import { useEffect, useRef } from 'react'
-import type { SSEEvent } from '@forgeos/shared'
+import type { SSEEvent } from '@radius/shared'
 
 export function useSSE(projectId: string | null, onEvent: (event: SSEEvent) => void) {
   const esRef = useRef<EventSource | null>(null)
@@ -429,7 +429,7 @@ The project list / landing screen before entering Studio.
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│  ⚡ ForgeOS Node Studio          [+ New Project]               │  ← header
+│  ⚡ Radius          [+ New Project]               │  ← header
 ├─────────────────────────────────────────────────────────────────┤
 │  Your Projects                                                  │
 │                                                                 │

@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import { prisma } from '../prisma'
 import { asyncHandler } from '../middleware/asyncHandler'
-import type { AgencySettings } from '@forgeos/shared'
+import type { AgencySettings } from '@radius/shared'
 
 const router = Router()
 

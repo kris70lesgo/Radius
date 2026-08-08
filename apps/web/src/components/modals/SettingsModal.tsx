@@ -3,7 +3,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { Loader2, Eye, EyeOff } from 'lucide-react'
 import { toast } from 'sonner'
 import { api } from '../../lib/api'
-import type { AgencySettings } from '@forgeos/shared'
+import type { AgencySettings } from '@radius/shared'
 
 const FIELDS: { key: keyof AgencySettings; label: string; group: string; secret?: boolean; placeholder?: string }[] = [
     { key: 'githubToken', label: 'GitHub Token', group: 'GitHub', secret: true, placeholder: 'ghp_...' },
@@ -13,7 +13,7 @@ const FIELDS: { key: keyof AgencySettings; label: string; group: string; secret?
     { key: 'storageAccessKeyId', label: 'Object Storage Key', group: 'Object Storage (S3)', secret: true },
     { key: 'storageSecretAccessKey', label: 'Object Storage Secret', group: 'Object Storage (S3)', secret: true },
     { key: 'storageRegion', label: 'Object Storage Region', group: 'Object Storage (S3)', placeholder: 'us-east-1' },
-    { key: 'storageBucket', label: 'Object Storage Bucket', group: 'Object Storage (S3)', placeholder: 'forgeos-memory' },
+    { key: 'storageBucket', label: 'Object Storage Bucket', group: 'Object Storage (S3)', placeholder: 'radius-memory' },
 ]
 
 interface Props {

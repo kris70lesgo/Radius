@@ -2,9 +2,9 @@ services:
   postgres:
     image: ankane/pgvector:latest
     environment:
-      POSTGRES_DB: forgeos_dev
-      POSTGRES_USER: forgeos
-      POSTGRES_PASSWORD: forgeos_dev_password
+      POSTGRES_DB: radius_dev
+      POSTGRES_USER: radius
+      POSTGRES_PASSWORD: radius_dev_password
     ports:
       - '5433:5432'
     volumes:

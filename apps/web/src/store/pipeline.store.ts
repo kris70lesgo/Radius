@@ -1,6 +1,6 @@
 import { create } from "zustand";
-import { NodeStatus, NODE_LABELS } from "@forgeos/shared";
-import type { PipelineNodeState, SSEEvent, Deployment } from "@forgeos/shared";
+import { NodeStatus, NODE_LABELS } from "@radius/shared";
+import type { PipelineNodeState, SSEEvent, Deployment } from "@radius/shared";
 import { api } from "../lib/api";
 import { queryClient } from "../App";
 

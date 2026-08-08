@@ -42,7 +42,7 @@ importers:
       '@aws-sdk/client-s3':
         specifier: ^3.1000.0
         version: 3.1000.0
-      '@forgeos/shared':
+      '@radius/shared':
         specifier: workspace:*
         version: link:../../packages/shared
       '@octokit/rest':
@@ -91,7 +91,7 @@ importers:
 
   apps/web:
     dependencies:
-      '@forgeos/shared':
+      '@radius/shared':
         specifier: workspace:*
         version: link:../../packages/shared
       '@monaco-editor/react':

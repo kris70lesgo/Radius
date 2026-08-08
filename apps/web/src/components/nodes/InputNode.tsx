@@ -3,7 +3,7 @@ import { Position } from "@xyflow/react";
 import { Play, Loader2, Maximize2 } from "lucide-react";
 import { BaseNode } from "./BaseNode";
 import { usePipelineStore } from "../../store/pipeline.store";
-import { NodeStatus } from "@forgeos/shared";
+import { NodeStatus } from "@radius/shared";
 
 export const InputNode = memo(({ data }: { data: any }) => {
   const nodes = usePipelineStore((s) => s.nodes);

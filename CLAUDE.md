@@ -1,4 +1,4 @@
-# ForgeOS Node Studio
+# Radius
 
 ## What This Is
 
@@ -32,7 +32,7 @@ Input: raw SaaS concept → Output: deployed boilerplate on Zerops via GitHub.
 
 ## Packages
 
-- Shared types: packages/shared (import as @forgeos/shared)
+- Shared types: packages/shared (import as @radius/shared)
 - API: apps/api (port 3001)
 - Web: apps/web (port 5173)
 
