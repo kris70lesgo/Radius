@@ -2,23 +2,39 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "../lib/api";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Plus, Rocket, Settings, Trash2, Zap } from "lucide-react";
+import { Plus, Rocket, Trash2, ArrowRight, Folder } from "lucide-react";
 import { NodeStatus, Project, ProjectStatus } from "@radius/shared";
 import { toast } from "sonner";
 import { SettingsModal } from "../components/modals/SettingsModal";
 import { ConceptWizard } from "../components/modals/ConceptWizard";
+import { Sidebar } from "../components/Sidebar";
+import { ProjectCard } from "../components/ui/project-card";
+import { ProjectFileIcon } from "../components/ui/custom-icons";
+import { Button } from "../components/ui/base/buttons/button";
 
 function SkeletonCard() {
   return (
-    <div className="bg-bg-surface border border-border rounded-xl p-4 flex items-center justify-between">
-      <div className="flex flex-col gap-2 flex-1">
-        <div className="skeleton h-5 w-3/4" />
-        <div className="skeleton h-3 w-1/3" />
+    <div
+      className="animate-pulse"
+      style={{
+        backgroundColor: "#111114",
+        border: "1px solid #222228",
+        borderRadius: "14px",
+        padding: "18px",
+        height: "170px",
+      }}
+    >
+      <div className="flex items-start justify-between mb-3">
+        <div className="w-9 h-9 rounded-[10px] bg-[#1A1A1E]" />
+        <div className="h-5 w-16 rounded-full bg-[#1A1A1E]" />
       </div>
-      <div className="skeleton h-8 w-24 rounded-md" />
+      <div className="h-5 w-3/4 bg-[#1A1A1E] rounded mb-3" />
+      <div className="h-4 w-1/2 bg-[#1A1A1E] rounded" />
     </div>
   );
 }
+
+const NODE_LABELS = ["Concept", "Strategist", "Analyst", "Tech Lead", "Shipyard"];
 
 export function Dashboard() {
   const navigate = useNavigate();
@@ -61,10 +77,7 @@ export function Dashboard() {
 
   const getEffectiveStatus = (p: Project): ProjectStatus => {
     const latestByNode = getLatestByNode(p);
-
-    const latestStatuses = Array.from(latestByNode.values()).map(
-      (o) => o.status,
-    );
+    const latestStatuses = Array.from(latestByNode.values()).map((o) => o.status);
 
     if (latestStatuses.includes(NodeStatus.FAILED)) {
       return ProjectStatus.FAILED;
@@ -86,11 +99,7 @@ export function Dashboard() {
 
     if (
       latestStatuses.some((s) =>
-        [
-          NodeStatus.QUEUED,
-          NodeStatus.PROCESSING,
-          NodeStatus.REGENERATING,
-        ].includes(s),
+        [NodeStatus.QUEUED, NodeStatus.PROCESSING, NodeStatus.REGENERATING].includes(s),
       )
     ) {
       return ProjectStatus.RUNNING;
@@ -113,11 +122,7 @@ export function Dashboard() {
     if (reviewNode) return reviewNode.nodeId;
 
     const activeNode = Array.from(latestByNode.values()).find((o) =>
-      [
-        NodeStatus.QUEUED,
-        NodeStatus.PROCESSING,
-        NodeStatus.REGENERATING,
-      ].includes(o.status),
+      [NodeStatus.QUEUED, NodeStatus.PROCESSING, NodeStatus.REGENERATING].includes(o.status),
     );
     if (activeNode) return activeNode.nodeId;
 
@@ -132,165 +137,209 @@ export function Dashboard() {
     return p.currentNode;
   };
 
-  const getStatusBadge = (p: Project) => {
+  const getStatusInfo = (p: Project) => {
     const status = getEffectiveStatus(p);
     switch (status) {
       case "COMPLETED":
-        return (
-          <span className="px-2 py-0.5 rounded text-xs font-bold bg-accent-success/20 text-accent-success">
-            COMPLETED
-          </span>
-        );
+        return {
+          label: "Completed",
+          className: "px-2.5 py-1 rounded-full text-[11px] font-medium",
+          style: { backgroundColor: "rgba(34,197,94,0.08)", color: "#22C55E", border: "1px solid rgba(34,197,94,0.12)" },
+        };
       case "AWAITING_REVIEW":
-        return (
-          <span className="px-2 py-0.5 rounded text-xs font-bold bg-accent-primary/20 text-accent-primary animate-pulse">
-            AWAITING REVIEW
-          </span>
-        );
+        return {
+          label: "In Review",
+          className: "px-2.5 py-1 rounded-full text-[11px] font-medium",
+          style: { backgroundColor: "rgba(124,58,237,0.08)", color: "#A78BFA", border: "1px solid rgba(124,58,237,0.12)" },
+        };
       case "RUNNING":
-        return (
-          <span className="px-2 py-0.5 rounded text-xs font-bold bg-accent-secondary/20 text-accent-secondary animate-pulse">
-            RUNNING
-          </span>
-        );
+        return {
+          label: "In Progress",
+          className: "px-2.5 py-1 rounded-full text-[11px] font-medium",
+          style: { backgroundColor: "rgba(59,130,246,0.08)", color: "#60A5FA", border: "1px solid rgba(59,130,246,0.12)" },
+        };
       case "FAILED":
-        return (
-          <span className="px-2 py-0.5 rounded text-xs font-bold bg-accent-danger/20 text-accent-danger">
-            FAILED
-          </span>
-        );
+        return {
+          label: "Failed",
+          className: "px-2.5 py-1 rounded-full text-[11px] font-medium",
+          style: { backgroundColor: "rgba(239,68,68,0.08)", color: "#F87171", border: "1px solid rgba(239,68,68,0.12)" },
+        };
       default:
-        return (
-          <span className="px-2 py-0.5 rounded text-xs font-bold bg-border text-text-muted">
-            {status}
-          </span>
-        );
+        return {
+          label: "Draft",
+          className: "px-2.5 py-1 rounded-full text-[11px] font-medium",
+          style: { backgroundColor: "rgba(255,255,255,0.04)", color: "#71717A", border: "1px solid rgba(255,255,255,0.06)" },
+        };
     }
   };
 
+  const formatDate = (date: Date) => {
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    return `Created ${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
+  };
+
   return (
-    <div className="min-h-screen bg-bg-base text-text-primary p-8 font-sans overflow-auto">
-      <div className="max-w-4xl mx-auto flex flex-col gap-6">
-        <header className="flex items-center justify-between pb-4 border-b border-border">
-          <div className="flex items-center gap-3">
-            <h1 className="text-2xl font-black font-mono tracking-tight text-text-primary flex items-center gap-2">
-              <Zap size={24} className="text-accent-primary" />
-              Radius
-            </h1>
-          </div>
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => setIsSettingsOpen(true)}
-              className="flex items-center justify-center w-9 h-9 rounded-md bg-bg-elevated border border-border text-text-muted hover:text-text-primary hover:border-accent-primary/50 transition-colors"
-              title="Agency Settings"
-            >
-              <Settings size={16} />
-            </button>
-            <button
+    <div className="min-h-screen w-full font-sans" style={{ backgroundColor: "#09090B" }}>
+      {/* Subtle radial vignette */}
+      <div
+        className="pointer-events-none fixed inset-0"
+        style={{
+          background:
+            "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(124,58,237,0.04) 0%, transparent 60%), radial-gradient(ellipse 60% 40% at 80% 100%, rgba(99,102,241,0.03) 0%, transparent 50%)",
+        }}
+      />
+
+      {/* Noise texture */}
+      <div
+        className="pointer-events-none fixed inset-0 opacity-[0.015]"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
+        }}
+      />
+
+      {/* Content */}
+      <div className="relative z-10 flex gap-4 p-4">
+        <Sidebar onSettingsClick={() => setIsSettingsOpen(true)} />
+
+        {/* Main content */}
+        <div
+          className="flex-1 flex flex-col"
+          style={{
+            padding: "48px",
+            minHeight: "calc(100vh - 32px)",
+          }}
+        >
+          {/* Header */}
+          <div className="flex items-end justify-between mb-12">
+            <div>
+              <h1
+                className="text-white font-semibold mb-2"
+                style={{ fontSize: "32px", fontWeight: 600, letterSpacing: "-0.02em" }}
+              >
+                Projects
+              </h1>
+              <p className="text-[#71717A] text-sm" style={{ fontWeight: 400 }}>
+                Build and deploy SaaS products with AI agents
+              </p>
+            </div>
+
+            <Button
+              size="md"
+              color="primary"
+              iconLeading={<Plus data-icon size={16} />}
               onClick={() => setIsModalOpen(true)}
-              className="flex items-center gap-2 bg-accent-primary text-bg-base px-4 py-2 rounded-md font-bold text-sm hover:bg-[#00e5ff] transition-colors shadow-lg shadow-accent-primary/20"
+              className="h-12 rounded-[14px] px-4 before:hidden"
             >
-              <Plus size={16} />
               New Project
-            </button>
+            </Button>
           </div>
-        </header>
 
-        <main>
-          <h2 className="text-sm font-bold text-text-muted uppercase tracking-wider mb-4">
-            Your Projects
-          </h2>
-
+          {/* Content */}
           {isLoading ? (
-            <div className="flex flex-col gap-3">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 auto-rows-fr">
               <SkeletonCard />
               <SkeletonCard />
               <SkeletonCard />
             </div>
           ) : data?.projects.length === 0 ? (
-            <div className="text-center py-16 border border-dashed border-border rounded-xl flex flex-col items-center gap-4">
-              <div className="w-16 h-16 rounded-full bg-bg-elevated flex items-center justify-center">
-                <Rocket size={28} className="text-text-muted" />
+            <div
+              className="flex flex-col items-center justify-center gap-4 text-center"
+              style={{
+                border: "1px dashed #27272A",
+                borderRadius: "20px",
+                padding: "64px 32px",
+              }}
+            >
+              <div
+                className="flex items-center justify-center"
+                style={{
+                  width: "56px",
+                  height: "56px",
+                  borderRadius: "14px",
+                  backgroundColor: "#111114",
+                  border: "1px solid #222228",
+                }}
+              >
+                <Rocket size={24} className="text-[#52525B]" />
               </div>
               <div>
-                <p className="text-text-primary font-semibold text-lg">
-                  No projects yet
-                </p>
-                <p className="text-text-muted text-sm mt-1">
+                <p className="text-[#FAFAFA] font-medium text-base mb-1">No projects yet</p>
+                <p className="text-[#71717A] text-sm">
                   Describe a SaaS idea and let our AI agents build it for you.
                 </p>
               </div>
-              <button
+              <Button
+                size="md"
+                color="primary"
+                iconLeading={<Plus data-icon size={16} />}
                 onClick={() => setIsModalOpen(true)}
-                className="flex items-center gap-2 bg-accent-primary text-bg-base px-5 py-2.5 rounded-md font-bold text-sm hover:bg-[#00e5ff] transition-colors mt-2"
+                className="h-12 rounded-[14px] px-4 mt-2 before:hidden"
               >
-                <Plus size={16} /> Create Your First Project
-              </button>
+                Create Your First Project
+              </Button>
             </div>
           ) : (
-            <div className="flex flex-col gap-3">
-              {data?.projects.map((project) => (
-                <div
-                  key={project.id}
-                  className="bg-bg-surface border border-border rounded-xl p-4 flex items-center justify-between hover:border-accent-primary/50 hover:shadow-lg hover:shadow-accent-primary/5 transition-all cursor-pointer group"
-                  onClick={() => navigate(`/studio/${project.id}`)}
-                >
-                  <div className="flex flex-col gap-1.5">
-                    <div className="flex items-center gap-3">
-                      <h3 className="font-semibold text-text-primary text-base line-clamp-1 max-w-[400px]">
-                        {project.concept}
-                      </h3>
-                      {getStatusBadge(project)}
-                    </div>
-                    <div className="text-xs text-text-muted flex items-center gap-2">
-                      <span>
-                        Created{" "}
-                        {new Date(project.createdAt).toLocaleDateString()}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 auto-rows-fr">
+              {data?.projects.map((project) => {
+                const statusInfo = getStatusInfo(project);
+                const displayNode = getDisplayNode(project);
+                return (
+                  <ProjectCard
+                    key={project.id}
+                    title={project.concept}
+                    description={formatDate(new Date(project.createdAt))}
+                    icon={<ProjectFileIcon width={28} height={28} />}
+                    statusBadge={
+                      <span className={statusInfo.className} style={statusInfo.style}>
+                        {statusInfo.label}
                       </span>
-                      <span>·</span>
-                      <span>Node {getDisplayNode(project)}</span>
+                    }
+                    onClick={() => navigate(`/studio/${project.id}`)}
+                  >
+                    {/* Footer left: node info */}
+                    <div className="flex items-center gap-1.5 text-xs text-[#52525B]">
+                      <Folder size={13} strokeWidth={1.8} />
+                      <span>Node {displayNode} · {NODE_LABELS[displayNode] ?? "—"}</span>
                     </div>
-                  </div>
-                  <div className="shrink-0 flex gap-2">
-                    <button
-                      className="text-xs font-semibold px-3 py-1.5 rounded-md bg-bg-elevated text-text-primary border border-border hover:bg-border group-hover:border-accent-primary/30 transition-colors"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        navigate(`/studio/${project.id}`);
-                      }}
-                    >
-                      Open Studio
-                    </button>
-                    <button
-                      className="text-xs px-2 py-1.5 rounded-md bg-bg-elevated border border-border text-text-muted hover:text-accent-danger hover:border-accent-danger/30 hover:bg-accent-danger/10 transition-colors"
-                      title="Delete project"
-                      onClick={async (e) => {
-                        e.stopPropagation();
-                        if (!confirm(`Delete "${project.concept}"?`)) return;
-                        try {
-                          await api.deleteProject(project.id);
-                          queryClient.invalidateQueries({
-                            queryKey: ["projects"],
-                          });
-                          toast.success("Project deleted");
-                        } catch (err: unknown) {
-                          toast.error("Failed to delete", {
-                            description:
-                              err instanceof Error
-                                ? err.message
-                                : "Unknown error",
-                          });
-                        }
-                      }}
-                    >
-                      <Trash2 size={14} />
-                    </button>
-                  </div>
-                </div>
-              ))}
+
+                    {/* Footer right: actions */}
+                    <div className="flex items-center gap-3">
+                      <button
+                        className="flex items-center gap-1 text-xs font-medium text-[#71717A] hover:text-[#FAFAFA] transition-colors duration-200"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          navigate(`/studio/${project.id}`);
+                        }}
+                      >
+                        Open
+                        <ArrowRight size={12} />
+                      </button>
+                      <button
+                        className="p-1 rounded text-[#52525B] hover:text-[#F87171] transition-colors duration-200"
+                        title="Delete project"
+                        onClick={async (e) => {
+                          e.stopPropagation();
+                          if (!confirm(`Delete "${project.concept}"?`)) return;
+                          try {
+                            await api.deleteProject(project.id);
+                            queryClient.invalidateQueries({ queryKey: ["projects"] });
+                            toast.success("Project deleted");
+                          } catch (err: unknown) {
+                            toast.error("Failed to delete", {
+                              description: err instanceof Error ? err.message : "Unknown error",
+                            });
+                          }
+                        }}
+                      >
+                        <Trash2 size={14} />
+                      </button>
+                    </div>
+                  </ProjectCard>
+                );
+              })}
             </div>
           )}
-        </main>
+        </div>
       </div>
 
       {isModalOpen && (

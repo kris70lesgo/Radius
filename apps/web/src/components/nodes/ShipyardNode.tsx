@@ -5,7 +5,6 @@ import {
   CheckCircle2,
   Circle,
   Cog,
-  ExternalLink,
   Globe,
   Github,
   Download,
@@ -31,16 +30,12 @@ export const ShipyardNode = memo(
     const isProcessing = data.status === NodeStatus.PROCESSING;
     const isFailed = data.status === NodeStatus.FAILED;
     const retryNode = usePipelineStore((s) => s.retryNode);
-    const zeropsConsoleUrl = deployment?.stepCDone
-      ? "https://app.zerops.io/dashboard/projects"
-      : null;
-
-    // Steps match shipyard.ts: A=Clone+Inject, B=Push to GitHub, C=Deploy, D=Poll active
+    // Steps match shipyard.ts: A=Clone+Inject, B=Push to GitHub, C=Deploy to Zerops, D=Poll active
     const steps = [
       { label: "Clone & inject schema", done: deployment?.stepADone },
       { label: "Push to GitHub", done: deployment?.stepBDone },
       { label: "Deploy to Zerops", done: deployment?.stepCDone },
-      { label: "Package ready", done: deployment?.stepDDone },
+      { label: "Build active", done: deployment?.stepDDone },
     ];
 
     return (
@@ -148,17 +143,6 @@ export const ShipyardNode = memo(
                     <Download size={10} /> ZIP Code
                   </a>
                 )}
-                {zeropsConsoleUrl && (
-                  <a
-                    href={zeropsConsoleUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-1 text-[10px] font-semibold bg-accent-primary/10 border border-accent-primary/30 rounded px-2 py-1 text-accent-primary hover:bg-accent-primary/20 transition-colors"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <ExternalLink size={10} /> Zerops
-                  </a>
-                )}
               </div>
             </div>
           ) : isFailed ? (
@@ -189,17 +173,6 @@ export const ShipyardNode = memo(
                     onClick={(e) => e.stopPropagation()}
                   >
                     <Download size={10} /> ZIP Code
-                  </a>
-                )}
-                {zeropsConsoleUrl && (
-                  <a
-                    href={zeropsConsoleUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-1 text-[10px] font-semibold bg-accent-primary/10 border border-accent-primary/30 rounded px-2 py-1 text-accent-primary hover:bg-accent-primary/20 transition-colors"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <ExternalLink size={10} /> Zerops
                   </a>
                 )}
               </div>

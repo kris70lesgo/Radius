@@ -10,10 +10,16 @@ const FIELDS: { key: keyof AgencySettings; label: string; group: string; secret?
     { key: 'githubOrg', label: 'Org / Username', group: 'GitHub', placeholder: 'your-github-username' },
     { key: 'goldenBoilerplateRepo', label: 'Boilerplate Repo', group: 'GitHub', placeholder: 'owner/repo-name' },
     { key: 'goldenBoilerplateSha', label: 'Boilerplate SHA', group: 'GitHub', placeholder: 'abc123...' },
-    { key: 'storageAccessKeyId', label: 'Object Storage Key', group: 'Object Storage (S3)', secret: true },
-    { key: 'storageSecretAccessKey', label: 'Object Storage Secret', group: 'Object Storage (S3)', secret: true },
-    { key: 'storageRegion', label: 'Object Storage Region', group: 'Object Storage (S3)', placeholder: 'us-east-1' },
-    { key: 'storageBucket', label: 'Object Storage Bucket', group: 'Object Storage (S3)', placeholder: 'radius-memory' },
+    { key: 'groqApiKey', label: 'Groq API Key', group: 'LLM', secret: true, placeholder: 'gsk_...' },
+    { key: 'brightdataApiToken', label: 'API Token', group: 'Bright Data', secret: true },
+    { key: 'brightdataZone', label: 'Zone', group: 'Bright Data', placeholder: 'your-zone' },
+    { key: 'algoliaAppId', label: 'App ID', group: 'Algolia', placeholder: 'XX12ABCD3E' },
+    { key: 'algoliaApiKey', label: 'API Key', group: 'Algolia', secret: true },
+    { key: 'algoliaIndexName', label: 'Index Name', group: 'Algolia', placeholder: 'radius_projects' },
+    { key: 'neo4jUri', label: 'URI', group: 'Neo4j', placeholder: 'bolt://localhost:7687' },
+    { key: 'neo4jUser', label: 'User', group: 'Neo4j', placeholder: 'neo4j' },
+    { key: 'neo4jPassword', label: 'Password', group: 'Neo4j', secret: true },
+    { key: 'storyblokToken', label: 'Access Token', group: 'Storyblok', secret: true },
 ]
 
 interface Props {

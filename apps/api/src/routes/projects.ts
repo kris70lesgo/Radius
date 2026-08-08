@@ -250,6 +250,12 @@ router.post(
         // Publish approved status
         await publishEvent(id, { type: 'NODE_STATUS', nodeId, status: NodeStatus.APPROVED })
 
+        // Node 4 (Shipyard) is the final pipeline node — no next node to queue
+        if (nodeId >= 4) {
+            res.json({ success: true })
+            return
+        }
+
         // Queue next job
         const project = await prisma.project.findUnique({ where: { id } })
         if (project) {

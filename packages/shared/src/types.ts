@@ -12,6 +12,21 @@ export interface AgencySettings {
   storageRegion?: string
   storageBucket?: string
   storageEndpoint?: string
+  // LLM
+  groqApiKey?: string
+  // Bright Data (web scraping)
+  brightdataApiToken?: string
+  brightdataZone?: string
+  // Algolia (search)
+  algoliaAppId?: string
+  algoliaApiKey?: string
+  algoliaIndexName?: string
+  // Neo4j (knowledge graph)
+  neo4jUri?: string
+  neo4jUser?: string
+  neo4jPassword?: string
+  // Storyblok (CMS)
+  storyblokToken?: string
 }
 
 export interface Agency {

@@ -76,6 +76,12 @@ export const api = {
     downloadLocalStack: (projectId: string) =>
         `${BASE}/api/projects/${projectId}/download`,
 
+    exportHandoff: (projectId: string, target: string) =>
+        request<{ content: string }>(`/api/pipeline/${projectId}/export`, {
+            method: 'POST',
+            body: JSON.stringify({ target }),
+        }),
+
     getAgencySettings: (agencyId: string) =>
         request<AgencySettings>(`/api/agencies/${agencyId}/settings`),
 

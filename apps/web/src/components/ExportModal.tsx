@@ -1,9 +1,8 @@
 import { useState } from 'react'
 import { X, Download, FileText } from 'lucide-react'
+import { api } from '../lib/api'
 
 type ExportTarget = 'claude' | 'cursor' | 'markdown'
-
-const BASE = import.meta.env.VITE_API_URL ?? 'http://localhost:3001'
 
 interface ExportModalProps {
   projectId: string
@@ -49,13 +48,7 @@ export function ExportModal({ projectId, isOpen, onClose }: ExportModalProps) {
     setPreview(null)
     setError(null)
     try {
-      const res = await fetch(`${BASE}/api/pipeline/${projectId}/export`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ target: t }),
-      })
-      if (!res.ok) throw new Error('Failed to generate export')
-      const data = await res.json()
+      const data = await api.exportHandoff(projectId, t)
       setPreview(data.content)
     } catch {
       setError('Failed to generate preview. Try again.')

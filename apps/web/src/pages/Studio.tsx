@@ -26,6 +26,19 @@ export function Studio() {
   const { projectId } = useParams();
   const navigate = useNavigate();
 
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
+    const root = document.getElementById("root");
+    if (root) root.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "auto";
+      document.documentElement.style.overflow = "auto";
+      const root = document.getElementById("root");
+      if (root) root.style.overflow = "auto";
+    };
+  }, []);
+
   const setProjectId = usePipelineStore((s) => s.setProjectId);
   const initNodes = usePipelineStore((s) => s.initNodes);
   const handleSSEEvent = usePipelineStore((s) => s.handleSSEEvent);
@@ -195,7 +208,7 @@ export function Studio() {
           A: "Clone & inject schema",
           B: "Push to GitHub",
           C: "Deploy to Zerops",
-          D: "Package ready",
+          D: "Build active",
         };
         for (const [step, label] of Object.entries(stepLabels)) {
           if ((dep as any)[`step${step}Done`]) {

@@ -38,8 +38,8 @@ services:
     priority: 1
     envSecrets:
       AI_API_KEY: ""
-      AI_BASE_URL: "https://integrate.api.nvidia.com/v1"
-      AI_MODEL: "deepseek-ai/deepseek-v4-pro"
+      AI_BASE_URL: "https://api.groq.com/openai/v1"
+      AI_MODEL: "llama-3.3-70b-versatile"
       GITHUB_TOKEN: ""
       GITHUB_ORG: "kris70lesgo"
       FRONTEND_URL: "https://web.zerops.app"

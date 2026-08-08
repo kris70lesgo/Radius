@@ -137,7 +137,7 @@ export const DEMO_RESPONSES = {
     envVarsRequired: ["DATABASE_URL", "NEXTAUTH_SECRET", "NEXTAUTH_URL", "DO_SPACES_KEY", "DO_SPACES_SECRET", "STRIPE_SECRET_KEY"]
   },
   node4: {
-    githubRepoUrl: "https://github.com/forgeos-demo/client-portal-law-firm-abc123",
+    githubRepoUrl: "https://github.com/radius-demo/client-portal-law-firm-abc123",
     doAppUrl: "https://client-portal-law-abc123.ondigitalocean.app",
     buildStatus: "ACTIVE"
   }
