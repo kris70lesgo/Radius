@@ -1,0 +1,17 @@
+.env
+.env.local
+.env.*.local
+.git
+.github
+.turbo
+*.log
+*.zip
+.DS_Store
+docs
+scripts
+apps/web/src
+apps/api/src
+packages/shared/src
+apps/web/node_modules
+apps/web/dist
+.vscode

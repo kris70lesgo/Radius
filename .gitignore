@@ -1,0 +1,43 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build outputs
+dist/
+build/
+.turbo/
+
+# Transpiled JS in src directories (editor auto-compile artifacts)
+apps/web/src/**/*.js
+apps/api/src/**/*.js
+
+# Environment files — never commit real secrets
+.env
+.env.local
+.env.*.local
+
+# MCP config contains API tokens — keep local only
+.mcp.json
+
+# Prisma
+prisma/migrations/dev.db
+prisma/migrations/dev.db-journal
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+*.swp
+*.swo
+
+# Temp / generated ZIP artifacts
+/tmp/
+*.zip
+.do/

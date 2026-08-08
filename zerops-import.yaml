@@ -1,0 +1,55 @@
+# yaml-language-server: $schema=https://api.app-prg1.zerops.io/api/rest/public/settings/import-project-yml-json-schema.json
+# ForgeOS Node Studio — Zerops infrastructure import
+# Import via Zerops Dashboard → "Import a project" or: zcli project project-import zerops-import.yaml
+#
+# After import:
+#   1. Set secret env variables in the Zerops GUI for the api service:
+#      AI_API_KEY, AI_BASE_URL, AI_MODEL, GITHUB_TOKEN, GITHUB_ORG
+#   2. Update VITE_API_URL in zerops.yaml build envVariables with the actual api subdomain URL
+#   3. Connect the GitHub repo to each runtime service in the Zerops GUI pipeline settings
+
+project:
+  name: forgeos
+  description: "Multi-agent SaaS incubation platform — deployed on Zerops"
+  corePackage: LIGHT
+  tags:
+    - wemakedevs
+    - zerops-challenge
+    - forgeos
+
+services:
+  # ── Database: Managed PostgreSQL (created first) ────────────────────────
+  - hostname: db
+    type: postgresql:single@16
+    priority: 3
+
+  # ── Cache: Managed Valkey (Redis-compatible, created second) ────────────
+  - hostname: cache
+    type: valkey@7.2
+    priority: 2
+
+  # ── API: Express backend + BullMQ worker ────────────────────────────────
+  - hostname: api
+    type: nodejs@22
+    mode: NON_HA
+    enableSubdomainAccess: true
+    buildFromGit: https://github.com/kris70lesgo/forgeos-zerops
+    zeropsSetup: api
+    priority: 1
+    envSecrets:
+      AI_API_KEY: ""
+      AI_BASE_URL: "https://integrate.api.nvidia.com/v1"
+      AI_MODEL: "deepseek-ai/deepseek-v4-pro"
+      GITHUB_TOKEN: ""
+      GITHUB_ORG: "kris70lesgo"
+      FRONTEND_URL: "https://web.zerops.app"
+      NODE_ENV: "production"
+      DEMO_AGENCY_ID: "demo-agency-cuid"
+
+  # ── Web: Vite static frontend ───────────────────────────────────────────
+  - hostname: web
+    type: static
+    enableSubdomainAccess: true
+    buildFromGit: https://github.com/kris70lesgo/forgeos-zerops
+    zeropsSetup: web
+    priority: 1

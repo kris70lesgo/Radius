@@ -1,0 +1,82 @@
+# yaml-language-server: $schema=https://api.app-prg1.zerops.io/api/rest/public/settings/zerops-yml-json-schema.json
+# ForgeOS Node Studio — Zerops build & deploy configuration
+# Monorepo: pnpm + Turborepo. Two runtime services (api + web) + managed Postgres + Valkey.
+
+zerops:
+  # ── API: Express + BullMQ worker + Prisma ───────────────────────────────
+  - setup: api
+    build:
+      base: nodejs@22
+      buildCommands:
+        - |
+          corepack enable
+          corepack prepare pnpm@10.14.0 --activate
+          pnpm install --frozen-lockfile
+          pnpm --filter @forgeos/shared build
+          pnpm --filter @forgeos/api build
+      # Deploy only what the runtime needs. node_modules is installed at runtime
+      # via initCommands to avoid pnpm symlink issues during file copy.
+      deployFiles:
+        - apps/api/dist
+        - apps/api/package.json
+        - apps/web/package.json
+        - packages/shared/dist
+        - packages/shared/package.json
+        - prisma
+        - prisma.config.ts
+        - package.json
+        - pnpm-lock.yaml
+        - pnpm-workspace.yaml
+        - turbo.json
+      cache: node_modules
+    deploy:
+      readinessCheck:
+        httpGet:
+          port: 3001
+          path: /health
+        failureTimeout: 180
+        retryPeriod: 5
+    run:
+      base: nodejs@22
+      prepareCommands:
+        - corepack enable
+        - corepack prepare pnpm@10.14.0 --activate
+      initCommands:
+        - pnpm install --frozen-lockfile
+        - pnpm prisma migrate deploy
+      ports:
+        - port: 3001
+          httpSupport: true
+      start: node apps/api/dist/index.js
+      envVariables:
+        NODE_ENV: production
+        PORT: "3001"
+        # Cross-service references: Zerops fills these from managed service env vars
+        DATABASE_URL: ${db_connectionString}
+        REDIS_URL: ${cache_connectionString}
+
+  # ── Web: Vite static build (React SPA) ──────────────────────────────────
+  - setup: web
+    build:
+      base: nodejs@22
+      buildCommands:
+        - |
+          corepack enable
+          corepack prepare pnpm@10.14.0 --activate
+          pnpm install --frozen-lockfile
+          pnpm --filter @forgeos/shared build
+          pnpm --filter @forgeos/web build
+      # The ~ wildcard flattens apps/web/dist/ contents into /var/www/
+      deployFiles: apps/web/dist/~
+      cache: node_modules
+      envVariables:
+        # UPDATE THIS after first deploy with the actual Zerops API subdomain URL.
+        # Format is typically: https://<project>-api.zerops.app
+        VITE_API_URL: "https://api.zerops.app"
+    run:
+      base: static
+      ports:
+        - port: 80
+          httpSupport: true
+      routing:
+        cors: "'*' always"
