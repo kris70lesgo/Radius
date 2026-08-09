@@ -51,7 +51,7 @@ zerops:
             await client.connect();
             const info = await client.query('SELECT current_user, session_user, current_database()');
             console.log('Connected as:', JSON.stringify(info.rows[0]));
-            const schemaOwner = await client.query("SELECT n.nspname, pg_catalog.pg_get_userbyid(n.nspowner) AS owner FROM pg_namespace WHERE nspname = 'public'");
+            const schemaOwner = await client.query("SELECT n.nspname, pg_catalog.pg_get_userbyid(n.nspowner) AS owner FROM pg_namespace n WHERE n.nspname = 'public'");
             console.log('Schema owner:', JSON.stringify(schemaOwner.rows[0]));
             try { await client.query('GRANT CREATE ON SCHEMA public TO current_user'); console.log('GRANT succeeded'); } catch (e) { console.log('GRANT failed:', e.message); }
             try {
