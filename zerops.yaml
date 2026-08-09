@@ -56,6 +56,10 @@ zerops:
         DATABASE_URL: ${db_connectionString}
         REDIS_URL: ${redis_connectionString}
         FRONTEND_URL: "https://web-20f.ny1.zerops.app"
+        # AI provider config — AI_API_KEY is set as a Zerops secret env var.
+        # These must match the provider that issued the key.
+        AI_BASE_URL: "https://api.groq.com/openai/v1"
+        AI_MODEL: "llama-3.3-70b-versatile"
 
   # ── Web: Vite static build (React SPA) ──────────────────────────────────
   - setup: web
