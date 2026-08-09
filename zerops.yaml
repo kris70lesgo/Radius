@@ -44,27 +44,6 @@ zerops:
       initCommands:
         - pnpm install --frozen-lockfile
         - pnpm prisma generate
-        # Clean up leftover Radius schema from prior failed diagnostic deployments.
-        # Drops all app-owned tables and enum types but preserves the
-        # Zerops-managed heartbeat table. Safe because the database has no
-        # production data — only leftover objects from failed migration attempts.
-        - |
-          cat > /tmp/cleanup-radius.sql << 'SQLEOF'
-          DO $$
-          DECLARE r RECORD;
-          BEGIN
-            FOR r IN (SELECT tablename FROM pg_tables WHERE schemaname = 'public' AND tablename != 'heartbeat')
-            LOOP
-              EXECUTE 'DROP TABLE IF EXISTS public."' || r.tablename || '" CASCADE';
-            END LOOP;
-            FOR r IN (SELECT typname FROM pg_type t JOIN pg_namespace n ON t.typnamespace = n.oid WHERE n.nspname = 'public' AND t.typtype = 'e')
-            LOOP
-              EXECUTE 'DROP TYPE IF EXISTS public."' || r.typname || '"';
-            END LOOP;
-          END $$;
-          SQLEOF
-          pnpm prisma db execute --file /tmp/cleanup-radius.sql
-        - pnpm prisma migrate resolve --applied 20260303140315_baseline
         - pnpm prisma migrate deploy
       ports:
         - port: 3001
