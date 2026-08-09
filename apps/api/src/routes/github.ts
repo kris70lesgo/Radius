@@ -8,7 +8,7 @@ const CLIENT_ID = process.env.GITHUB_CLIENT_ID ?? ''
 const CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET ?? ''
 
 // GET /api/github/login — redirect to GitHub OAuth authorize page
-router.get('/login', (_req, res) => {
+router.get('/login', (req, res) => {
   if (!CLIENT_ID) {
     res.status(500).json({
       error: 'GITHUB_CLIENT_ID is not configured. Create a GitHub OAuth App and set the env vars.',
@@ -16,10 +16,18 @@ router.get('/login', (_req, res) => {
     return
   }
 
-  // Build the callback URL from the request's own origin so it works
-  // in both local development and production behind a reverse proxy.
-  const proto = _req.protocol // respects trust proxy
-  const host = _req.get('host')
+  // Determine the correct protocol. Zerops terminates TLS at the L7 balancer
+  // and may not send X-Forwarded-Proto, so we check multiple signals:
+  //   1. X-Forwarded-Proto header (standard reverse-proxy header)
+  //   2. req.secure (true if the socket is TLS — won't be behind a proxy)
+  //   3. Fall back to https for production (NODE_ENV=production)
+  const forwardedProto = req.get('x-forwarded-proto')
+  const isHttps =
+    forwardedProto === 'https' ||
+    req.secure ||
+    process.env.NODE_ENV === 'production'
+  const proto = isHttps ? 'https' : 'http'
+  const host = req.get('host')
   const redirectUri = `${proto}://${host}/api/auth/github/callback`
   const scope = 'repo user'
   const state = Math.random().toString(36).substring(2, 10)
