@@ -43,7 +43,7 @@ zerops:
         - corepack prepare pnpm@10.14.0 --activate
       initCommands:
         - pnpm install --frozen-lockfile
-        - pnpm prisma migrate deploy
+        - pnpm prisma migrate reset --force
       ports:
         - port: 3001
           httpSupport: true
