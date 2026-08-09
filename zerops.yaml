@@ -28,6 +28,7 @@ zerops:
         - pnpm-lock.yaml
         - pnpm-workspace.yaml
         - turbo.json
+        - scripts/init-schema.sql
       cache: node_modules
     deploy:
       readinessCheck:
@@ -43,7 +44,7 @@ zerops:
         - corepack prepare pnpm@10.14.0 --activate
       initCommands:
         - pnpm install --frozen-lockfile
-        - pnpm prisma migrate resolve --applied 20260303140315_baseline || true
+        - pnpm prisma db execute --file scripts/init-schema.sql
         - pnpm prisma migrate deploy
       ports:
         - port: 3001
@@ -53,7 +54,7 @@ zerops:
         NODE_ENV: production
         PORT: "3001"
         # Cross-service references: Zerops fills these from managed service env vars
-        DATABASE_URL: ${db_connectionString}
+        DATABASE_URL: ${db_connectionString}?schema=radius
         REDIS_URL: ${redis_connectionString}
 
   # ── Web: Vite static build (React SPA) ──────────────────────────────────
