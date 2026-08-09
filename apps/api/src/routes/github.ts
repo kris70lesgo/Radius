@@ -16,7 +16,11 @@ router.get('/login', (_req, res) => {
     return
   }
 
-  const redirectUri = `http://localhost:${process.env.PORT ?? 3000}/api/auth/github/callback`
+  // Build the callback URL from the request's own origin so it works
+  // in both local development and production behind a reverse proxy.
+  const proto = _req.protocol // respects trust proxy
+  const host = _req.get('host')
+  const redirectUri = `${proto}://${host}/api/auth/github/callback`
   const scope = 'repo user'
   const state = Math.random().toString(36).substring(2, 10)
 

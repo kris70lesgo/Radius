@@ -13,6 +13,9 @@ import { errorHandler } from './middleware/errorHandler'
 import './workers/pipeline.worker' // register worker on startup
 
 const app = express()
+// Trust the Zerops reverse proxy so Express sees the original HTTPS protocol
+// and sets secure cookies correctly.
+app.set('trust proxy', 1)
 const PORT = parseInt(process.env.PORT ?? '3000', 10)
 const FRONTEND_URL = process.env.FRONTEND_URL ?? 'http://localhost:5173'
 
