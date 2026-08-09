@@ -73,7 +73,7 @@ zerops:
       envVariables:
         # UPDATE THIS after first deploy with the actual Zerops API subdomain URL.
         # Format is typically: https://<project>-api.zerops.app
-        VITE_API_URL: "https://api.zerops.app"
+        VITE_API_URL: "https://api-20f-3001.ny1.zerops.app"
     run:
       base: static
       ports:
