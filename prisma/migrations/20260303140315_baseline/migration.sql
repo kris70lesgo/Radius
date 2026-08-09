@@ -1,0 +1,15 @@
+-- Baseline migration for Zerops-managed PostgreSQL.
+--
+-- Zerops provisions a platform-managed "heartbeat" table in the public schema
+-- that the application database user does not own. This table is NOT part of
+-- the Radius schema and must not be dropped or modified.
+--
+-- This no-op baseline exists so that `prisma migrate resolve --applied` can
+-- mark the pre-Radius state as applied, satisfying Prisma's requirement that
+-- the schema not be "empty" (P3005) without attempting to drop the heartbeat
+-- table (which would fail with P3016).
+--
+-- After this baseline is marked applied, `prisma migrate deploy` runs the
+-- six Radius migrations (20260303140316_init onward) which create only
+-- Radius-owned tables and enums — none of which conflict with the heartbeat
+-- table.
