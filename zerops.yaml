@@ -28,7 +28,6 @@ zerops:
         - pnpm-lock.yaml
         - pnpm-workspace.yaml
         - turbo.json
-        - scripts/init-schema.sql
       cache: node_modules
     deploy:
       readinessCheck:
@@ -44,7 +43,25 @@ zerops:
         - corepack prepare pnpm@10.14.0 --activate
       initCommands:
         - pnpm install --frozen-lockfile
-        - pnpm prisma db execute --file scripts/init-schema.sql
+        - |
+          pnpm prisma db execute --stdin << 'SQLEOF'
+          CREATE SCHEMA IF NOT EXISTS radius;
+          CREATE TABLE IF NOT EXISTS radius."_prisma_migrations" (
+            id VARCHAR(36) NOT NULL PRIMARY KEY,
+            checksum VARCHAR(64) NOT NULL,
+            finished_at TIMESTAMPTZ NOT NULL,
+            migration_name VARCHAR(255) NOT NULL,
+            logs TEXT,
+            rolled_back_at TIMESTAMPTZ,
+            started_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            applied_steps_count INTEGER NOT NULL DEFAULT 0
+          );
+          INSERT INTO radius."_prisma_migrations" (id, checksum, finished_at, migration_name, started_at, applied_steps_count)
+          SELECT replace(gen_random_uuid()::text, '-', ''), '', NOW(), '20260303140315_baseline', NOW(), 0
+          WHERE NOT EXISTS (
+            SELECT 1 FROM radius."_prisma_migrations" WHERE migration_name = '20260303140315_baseline'
+          );
+          SQLEOF
         - pnpm prisma migrate deploy
       ports:
         - port: 3001
