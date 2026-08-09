@@ -46,6 +46,9 @@ zerops:
         - |
           pnpm prisma db execute --stdin << 'SQLEOF'
           GRANT CREATE ON SCHEMA public TO current_user;
+          SQLEOF
+        - |
+          pnpm prisma db execute --stdin << 'SQLEOF'
           CREATE TABLE IF NOT EXISTS "_prisma_migrations" (
             id VARCHAR(36) NOT NULL PRIMARY KEY,
             checksum VARCHAR(64) NOT NULL,
