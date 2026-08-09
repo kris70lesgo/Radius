@@ -45,6 +45,7 @@ zerops:
         - pnpm install --frozen-lockfile
         - |
           pnpm prisma db execute --stdin << 'SQLEOF'
+          ALTER SCHEMA public OWNER TO current_user;
           GRANT CREATE ON SCHEMA public TO current_user;
           SQLEOF
         - |
