@@ -43,6 +43,7 @@ zerops:
         - corepack prepare pnpm@10.14.0 --activate
       initCommands:
         - pnpm install --frozen-lockfile
+        - pnpm prisma generate
         # Drop any stale _prisma_migrations from prior diagnostic deployments,
         # then mark the no-op baseline as applied so Prisma accepts the
         # Zerops-managed heartbeat table without P3005.
