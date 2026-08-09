@@ -44,28 +44,27 @@ zerops:
       initCommands:
         - pnpm install --frozen-lockfile
         - |
-          pnpm prisma db execute --stdin << 'SQLEOF'
-          ALTER SCHEMA public OWNER TO current_user;
-          GRANT CREATE ON SCHEMA public TO current_user;
-          SQLEOF
-        - |
-          pnpm prisma db execute --stdin << 'SQLEOF'
-          CREATE TABLE IF NOT EXISTS "_prisma_migrations" (
-            id VARCHAR(36) NOT NULL PRIMARY KEY,
-            checksum VARCHAR(64) NOT NULL,
-            finished_at TIMESTAMPTZ NOT NULL,
-            migration_name VARCHAR(255) NOT NULL,
-            logs TEXT,
-            rolled_back_at TIMESTAMPTZ,
-            started_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
-            applied_steps_count INTEGER NOT NULL DEFAULT 0
-          );
-          INSERT INTO "_prisma_migrations" (id, checksum, finished_at, migration_name, started_at, applied_steps_count)
-          SELECT replace(gen_random_uuid()::text, '-', ''), '', NOW(), '20260303140315_baseline', NOW(), 0
-          WHERE NOT EXISTS (
-            SELECT 1 FROM "_prisma_migrations" WHERE migration_name = '20260303140315_baseline'
-          );
-          SQLEOF
+          cat > /tmp/init-db.js << 'JSEOF'
+          const { Client } = require(require.resolve('pg', { paths: ['/var/www/apps/api/node_modules', '/var/www/node_modules', process.cwd() + '/apps/api/node_modules', process.cwd() + '/node_modules'] }));
+          async function main() {
+            const client = new Client({ connectionString: process.env.DATABASE_URL });
+            await client.connect();
+            const info = await client.query('SELECT current_user, session_user, current_database()');
+            console.log('Connected as:', JSON.stringify(info.rows[0]));
+            const schemaOwner = await client.query("SELECT n.nspname, pg_catalog.pg_get_userbyid(n.nspowner) AS owner FROM pg_namespace WHERE nspname = 'public'");
+            console.log('Schema owner:', JSON.stringify(schemaOwner.rows[0]));
+            try { await client.query('GRANT CREATE ON SCHEMA public TO current_user'); console.log('GRANT succeeded'); } catch (e) { console.log('GRANT failed:', e.message); }
+            try {
+              await client.query(`CREATE TABLE IF NOT EXISTS "_prisma_migrations" (id VARCHAR(36) NOT NULL PRIMARY KEY, checksum VARCHAR(64) NOT NULL, finished_at TIMESTAMPTZ NOT NULL, migration_name VARCHAR(255) NOT NULL, logs TEXT, rolled_back_at TIMESTAMPTZ, started_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP, applied_steps_count INTEGER NOT NULL DEFAULT 0)`);
+              console.log('CREATE TABLE succeeded');
+              await client.query(`INSERT INTO "_prisma_migrations" (id, checksum, finished_at, migration_name, started_at, applied_steps_count) SELECT replace(gen_random_uuid()::text, '-', ''), '', NOW(), '20260303140315_baseline', NOW(), 0 WHERE NOT EXISTS (SELECT 1 FROM "_prisma_migrations" WHERE migration_name = '20260303140315_baseline')`);
+              console.log('INSERT baseline succeeded');
+            } catch (e) { console.log('CREATE TABLE failed:', e.message); }
+            await client.end();
+          }
+          main().catch(e => { console.error(e); process.exit(1); });
+          JSEOF
+          node /tmp/init-db.js
         - pnpm prisma migrate deploy
       ports:
         - port: 3001
