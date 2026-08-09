@@ -13,7 +13,7 @@ import { errorHandler } from './middleware/errorHandler'
 import './workers/pipeline.worker' // register worker on startup
 
 const app = express()
-const PORT = process.env.PORT ?? 3000
+const PORT = parseInt(process.env.PORT ?? '3000', 10)
 const FRONTEND_URL = process.env.FRONTEND_URL ?? 'http://localhost:5173'
 
 app.use(cors({
@@ -63,8 +63,8 @@ async function start() {
   await redis.connect()
   await redisSub.connect()
 
-  app.listen(PORT, () => {
-    console.log(`Radius API running on http://localhost:${PORT}`)
+  app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Radius API running on http://0.0.0.0:${PORT}`)
     console.log(`\n--- Environment Variables ---`)
     console.log(`DATABASE_URL:          ${process.env.DATABASE_URL ? '✅ SET' : '❌ MISSING'}`)
     console.log(`REDIS_URL:             ${process.env.REDIS_URL ?? '❌ MISSING'}`)

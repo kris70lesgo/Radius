@@ -32,7 +32,7 @@ zerops:
     deploy:
       readinessCheck:
         httpGet:
-          port: 3001
+          port: 3000
           path: /health
         failureTimeout: 180s
         retryPeriod: 10s
@@ -46,12 +46,12 @@ zerops:
         - pnpm prisma generate
         - pnpm prisma migrate deploy
       ports:
-        - port: 3001
+        - port: 3000
           httpSupport: true
       start: node apps/api/dist/index.js
       envVariables:
         NODE_ENV: production
-        PORT: "3001"
+        PORT: "3000"
         # Cross-service references: Zerops fills these from managed service env vars
         DATABASE_URL: ${db_connectionString}
         REDIS_URL: ${redis_connectionString}
